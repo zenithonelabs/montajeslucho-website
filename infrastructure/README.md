@@ -159,11 +159,13 @@ $ aws --version
 
 9. Access your web using the CloudFront URL from the OpenTofu apply output
 
-10. If you need to delete all the infrastructure execute:
+## Instructions: Destroy Local OpenTofu
 
-    ```console
-    $ tofu destroy
-    ```
+If you need to delete all the infrastructure execute
+
+```console
+$ tofu destroy
+```
 
 ## Instructions: Remote OpenTofu
 
@@ -276,6 +278,96 @@ State locking ensures that only one OpenTofu operation runs at a time, preventin
     ```console
     tofu plan -var-file="prod.tfvars" -out="prod.tfplan"
     tofu apply "prod.tfplan"
+    ```
+
+## Instructions: Destroy Remote OpenTofu
+
+1. Initialize OpenTofu
+
+    ```console
+    cd infrastructure/src
+    tofu init
+    ```
+
+2. Pull remote state locally
+
+    Export the current remote state:
+
+    ```console
+    tofu state pull > terraform.tfstate
+    ```
+
+    This creates a local backup of the current infrastructure state.
+
+3. Remove remote backend configuration
+
+    Open your backend configuration (e.g. backend.tf) and remove or comment it out:
+
+    ```terraform
+    # Before (S3 backend)
+    terraform {
+        backend "s3" {
+            bucket         = var.opentofu_state_s3_bucket_name
+            key            = "terraform.tfstate"
+            region         = var.aws_region
+            dynamodb_table = var.opentofu_lock_dynamodb_table_name
+            encrypt        = true
+        }
+    }
+    ```
+
+    ```terraform
+    # After (local state)
+    
+    ```
+    
+    4. Reinitialize with state migration
+
+    ```console
+    tofu init -migrate-state
+    ```
+
+    When prompted, confirm migration. This moves the state from S3 → local terraform.tfstate.
+
+    5. Verify state is local
+
+    ```console
+    tofu state list
+    ```
+
+    You should still see all managed resources.
+
+    6. Before deleting the whole infrastructure, empty the S3 bucket content using AWS Console (Portal) or AWS CLI:
+
+    ```console
+    aws s3 rm s3://bucketname --recursive
+    ```
+
+    7. Re-enable **prevent_destroy = true** in the S3 buckets as well
+
+    ```terraform
+    resource "aws_s3_bucket" "opentofu_state" {
+        bucket = var.opentofu_state_s3_bucket_name
+
+        lifecycle {
+            prevent_destroy = true
+        }
+    }
+    ```
+
+    Apply the prevent_destroy policy:
+
+    ```console
+    tofu plan -var-file="prod.tfvars" -out="prod.tfplan"
+    tofu apply "prod.tfplan"
+    ```
+
+    7. Destroy all the infrastructure
+
+    Now that state is local, so it is safe to destroy everything:
+
+    ```console
+    tofu destroy -var-file="prod.tfvars"
     ```
 
 ## AWS Infrastructure Resources
