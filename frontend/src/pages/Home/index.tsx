@@ -55,10 +55,9 @@ export default function Home() {
           </div>
 
           <div className="beneficio-card">
-            <h3>✔ Transporte seguro</h3>
+            <h3>✔ Solución de imprevistos</h3>
             <p>
-              Traslados con protección, fijación correcta de carga y total
-              seguridad para tus objetos.
+              Capacidad para adaptarnos y resolver problemas en el momento.
             </p>
           </div>
 

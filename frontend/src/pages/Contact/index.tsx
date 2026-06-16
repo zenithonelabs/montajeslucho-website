@@ -21,14 +21,14 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
   setStatus({ sending: true, ok: null, error: "" });
   try {
-    await emailjs.send("service_3x61feq","template_fuhftay",
+    await emailjs.send("service_rfai16l","template_i0auidr",
       {
         nombre: form.nombre,
         telefono: form.telefono,
         email: form.email,
         mensaje: form.mensaje,
       },
-      "l75H06RHW9MrQLZXl"
+      "_Gj6vADzzBZxDI3bO"
     );
 
     setStatus({ sending: false, ok: true, error: "" });

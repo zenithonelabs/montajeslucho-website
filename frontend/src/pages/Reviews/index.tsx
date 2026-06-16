@@ -9,13 +9,13 @@ export default function Reviews() {
     },
     {
       img: "/img/reseña2.webp.jpeg",
-      texto: "Montó la cocina con precisión y dejó todo limpio.",
+      texto: "Montó el armario de mi habitación con precisión y dejó todo limpio.",
       autor: "Jorge R."
     },
     {
       img: "/img/reseña3.webp.jpeg",
       texto: "100% recomendable. Serio y puntual.",
-      autor: "Cliente TaskRabbit"
+      autor: "Ruben Garcia"
     }
   ];
 

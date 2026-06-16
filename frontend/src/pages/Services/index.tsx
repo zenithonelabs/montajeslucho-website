@@ -64,9 +64,6 @@ export default function Services() {
               <li>Montaje y equilibrado de ventiladores</li>
               <li>Comprobación de funcionamiento</li>
             </ul>
-            <small className="note">
-              *Para trabajos eléctricos complejos se coordina electricista homologado.
-            </small>
           </div>
 
           <div className="service-card">
